@@ -1,31 +1,27 @@
 import React, { Component } from 'react'
 
 export default class Todo extends Component {
-    constructor(props){
-        super(props);
+    constructor(){
+        super();
         this.state={
-            tasks:[{id:1,txt:"First task"},{id:2,txt:"Second task"},{id:3,txt:"Third task"}],
-            currTask:''
+            tasks:[{id:1,txt:"First task"},{id:2,txt:"Second task"},{id:3,txt:"Third task"}]
+           
         }
 
        
     }
-    handleChange=(e)=>{    //whenever change is there in input element it is called
-        let cval=e.target.value;
-        this.setState({currTask:cval});
-    }
-
-    handleClick=(e)=>{
+ 
+    handleClick=(task)=>{
         // console.log(this.state.currTask);
 
         // this.state.tasks.push({id:this.state.tasks.length+1,txt:this.state.currTask})
         //this.state.currTask='';
 
-        let nta=[...this.state.tasks,{id:this.state.tasks.length+1,txt:this.state.currTask}]
+        let nta=[...this.state.tasks,{id:this.state.tasks.length+1,txt:task}]
 
         this.setState({
-            tasks:nta,
-            currTask:''
+            tasks:nta
+          
         })
    
     }
@@ -42,7 +38,7 @@ export default class Todo extends Component {
     render() {
         return (
             <>
-             <InputComponent currTask={this.state.currTask} handleChange={this.handleChange} handleClick={this.handleClick}/>
+             <InputComponent  handleClick={this.handleClick}/>
              <TaskList tasks={this.state.tasks} onDelete={this.onDelete}/>
             
               
@@ -58,13 +54,21 @@ export default class Todo extends Component {
 class InputComponent extends Component {
    constructor(props){
        super(props);
+        this.state={
+            currTask:''
+        }
+   }
+   handleChange=(e)=>{
+    this.setState({currTask:e.target.value})
    }
     render() {
         return (
             <div>
                 <div className='input-container'>
-                  <input  type='text' value={this.props.currTask} onChange={this.props.handleChange}></input>
-                  <button onClick={this.props.handleClick}>Add</button>
+                  <input  type='text' value={this.props.currTask} onChange={this.handleChange}></input>
+                  <button onClick={()=>{this.props.handleClick(this.state.currTask);
+                    this.setState({currTask:''})
+                }}>Add</button>
               </div>
             </div>
         )
